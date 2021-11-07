@@ -4,18 +4,29 @@ import { PokemonPaginatedResponse, SimplePokemon, Result } from '../interfaces/p
 
 export const usePokemonPaginated = () => {
     
+    const [isLoading, setIsLoading] = useState(true)
     const [simplePokemonList, setSimplePokemonList] = useState<SimplePokemon[]>([])
-
     const nextPageUrl = useRef('https://pokeapi.co/api/v2/ability/?limit=40&offset=20')
 
+
     const loadPokemons = async () => {
+        setIsLoading(true);
         const response = await pokemonApi.get<PokemonPaginatedResponse>(nextPageUrl.current);
         nextPageUrl.current = response.data.next;
         mapPokemonList( response.data.results )
     }
     
     const mapPokemonList = ( pokemonList: Result[] ) => {
-        pokemonList.forEach (poke => console.log(poke.url))
+        
+        const newPokemonList: SimplePokemon[] = pokemonList.map( ( {name, url} )=>{            
+            const urlParts = url.split('/');
+            const id = urlParts[ urlParts.length - 2 ];
+            const picture = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+            return{ id, picture, name };
+        })
+
+        setSimplePokemonList([...simplePokemonList, ...newPokemonList])
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -25,6 +36,8 @@ export const usePokemonPaginated = () => {
     }, [])
 
     return{
-        simplePokemonList
+        isLoading,
+        simplePokemonList,
+        loadPokemons
     }
 }
