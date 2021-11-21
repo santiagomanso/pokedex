@@ -37,7 +37,8 @@ export const HomeScreen = () => {
                                 ...styles.title,
                                 ...styles.globalMargin,
                                 top: top + 20,
-                                marginBottom: top + 20
+                                marginBottom: top + 20,
+                                paddingBottom: 10
                             }}
                         >Pókedex</Text>
                     )}
