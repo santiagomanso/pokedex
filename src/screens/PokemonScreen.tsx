@@ -46,7 +46,7 @@ export const PokemonScreen = ( { navigation, route }:Props ) => {
                     ...styles.pokemonName,
                     top: top + 45
                 }}>
-                    { name + '\n' } #{id}
+                    { name + '\n' }#{id}
                 </Text>
 
                 {/* White Pokebol */}
